@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chronos Ultimate - Complete Time Management</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidenav">
+            <div class="brand">
+                <i class="fas fa-clock"></i>
+                <span>Chronos</span>
+            </div>
+            <div class="nav-group">
+                <button class="nav-item active" data-section="alarms">
+                    <i class="fas fa-alarm-clock"></i>
+                    <span>Alarms</span>
+                </button>
+                <button class="nav-item" data-section="calendar">
+                    <i class="fas fa-calendar-alt"></i>
+                    <span>Calendar</span>
+                </button>
+                <button class="nav-item" data-section="reminders">
+                    <i class="fas fa-bell"></i>
+                    <span>Reminders</span>
+                    <span class="badge" id="reminder-count">0</span>
+                </button>
+                <button class="nav-item" data-section="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </button>
+            </div>
+            <div class="nav-footer">
+                <button id="backup-btn" class="icon-button" title="Backup data">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </button>
+                <button id="theme-toggle" class="icon-button" title="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </nav>
+
+        <main class="content">
+            <!-- Alarms Section -->
+            <section id="alarms" class="content-section active">
+                <div class="section-header">
+                    <h2>Alarm Management</h2>
+                    <div class="alarm-actions">
+                        <button class="fab-button" id="add-alarm">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <div class="alarm-search">
+                            <input type="text" placeholder="Search alarms..." id="alarm-search">
+                        </div>
+                    </div>
+                </div>
+                <div class="alarm-list" id="alarm-list"></div>
+            </section>
+
+            <!-- Calendar Section -->
+            <section id="calendar" class="content-section">
+                <div class="calendar-header">
+                    <button class="icon-button" id="prev-month">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <h2 id="current-month"></h2>
+                    <button class="icon-button" id="next-month">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+                <div class="calendar-view-options">
+                    <button class="view-option active" data-view="month">Month</button>
+                    <button class="view-option" data-view="week">Week</button>
+                    <button class="view-option" data-view="day">Day</button>
+                </div>
+                <div class="calendar-grid" id="calendar-grid"></div>
+                <div class="calendar-events" id="calendar-events"></div>
+            </section>
+
+            <!-- Reminders Section -->
+            <section id="reminders" class="content-section">
+                <div class="section-header">
+                    <h2>Reminders</h2>
+                    <div class="reminder-actions">
+                        <button class="fab-button" id="add-reminder">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <div class="reminder-filters">
+                            <select id="reminder-filter">
+                                <option value="all">All Reminders</option>
+                                <option value="today">Today</option>
+                                <option value="week">This Week</option>
+                                <option value="high">High Priority</option>
+                                <option value="completed">Completed</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="reminder-list" id="reminder-list"></div>
+            </section>
+
+            <!-- Settings Section -->
+            <section id="settings" class="content-section">
+                <div class="section-header">
+                    <h2>Application Settings</h2>
+                </div>
+                <div class="settings-grid">
+                    <div class="settings-group">
+                        <h3>Appearance</h3>
+                        <div class="setting-item">
+                            <label>Dark Mode</label>
+                            <label class="switch">
+                                <input type="checkbox" id="dark-mode-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>Accent Color</label>
+                            <input type="color" id="accent-color" value="#0A84FF">
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Sounds & Notifications</h3>
+                        <div class="setting-item">
+                            <label>Default Ringtone</label>
+                            <select id="default-ringtone" class="form-control"></select>
+                        </div>
+                        <div class="setting-item">
+                            <label>Vibration</label>
+                            <label class="switch">
+                                <input type="checkbox" id="vibration-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <label>Upload Custom Ringtone</label>
+                            <input type="file" id="ringtone-upload" accept="audio/*" hidden>
+                            <button class="btn" onclick="document.getElementById('ringtone-upload').click()">
+                                <i class="fas fa-upload"></i> Upload Ringtone
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
+                        <h3>Data Management</h3>
+                        <div class="setting-item">
+                            <button class="btn" id="export-data">
+                                <i class="fas fa-file-export"></i> Export Data
+                            </button>
+                            <button class="btn" id="import-data">
+                                <i class="fas fa-file-import"></i> Import Data
+                            </button>
+                        </div>
+                        <div class="setting-item">
+                            <button class="btn btn-danger" id="clear-data">
+                                <i class="fas fa-trash"></i> Clear All Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Alarm Modal -->
+    <div id="alarm-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Create New Alarm</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="alarm-form">
+                    <div class="form-group">
+                        <label for="alarm-time">Time</label>
+                        <input type="time" id="alarm-time" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="alarm-label">Label</label>
+                        <input type="text" id="alarm-label" placeholder="Alarm label">
+                    </div>
+                    <div class="form-group">
+                        <label>Repeat</label>
+                        <div class="days-grid">
+                            <button type="button" class="day-option" data-day="0">Sun</button>
+                            <button type="button" class="day-option" data-day="1">Mon</button>
+                            <button type="button" class="day-option" data-day="2">Tue</button>
+                            <button type="button" class="day-option" data-day="3">Wed</button>
+                            <button type="button" class="day-option" data-day="4">Thu</button>
+                            <button type="button" class="day-option" data-day="5">Fri</button>
+                            <button type="button" class="day-option" data-day="6">Sat</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="alarm-ringtone">Ringtone</label>
+                        <select id="alarm-ringtone" class="form-control"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="alarm-snooze">Snooze Duration</label>
+                        <select id="alarm-snooze" class="form-control">
+                            <option value="5">5 minutes</option>
+                            <option value="10">10 minutes</option>
+                            <option value="15">15 minutes</option>
+                            <option value="30">30 minutes</option>
+                            <option value="custom">Custom</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="app.closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Alarm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Snooze Modal -->
+    <div id="snooze-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Snooze Options</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="snooze-presets">
+                    <button class="snooze-preset" data-minutes="5">5 minutes</button>
+                    <button class="snooze-preset" data-minutes="10">10 minutes</button>
+                    <button class="snooze-preset" data-minutes="15">15 minutes</button>
+                    <button class="snooze-preset" data-minutes="30">30 minutes</button>
+                </div>
+                <div class="custom-snooze">
+                    <input type="number" id="custom-snooze-minutes" placeholder="Enter custom minutes">
+                    <button class="btn" id="set-custom-snooze">Set Custom Snooze</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reminder Modal -->
+    <div id="reminder-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>New Reminder</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="reminder-form">
+                    <div class="form-group">
+                        <label for="reminder-title">Title</label>
+                        <input type="text" id="reminder-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reminder-date">Due Date</label>
+                        <input type="datetime-local" id="reminder-date">
+                    </div>
+                    <div class="form-group">
+                        <label for="reminder-priority">Priority</label>
+                        <select id="reminder-priority" class="form-control">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="reminder-notes">Notes</label>
+                        <textarea id="reminder-notes" rows="3"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="app.closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Reminder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="event-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Calendar Event</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="event-form">
+                    <div class="form-group">
+                        <label for="event-title">Event Title</label>
+                        <input type="text" id="event-title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-start">Start Time</label>
+                        <input type="datetime-local" id="event-start" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-end">End Time</label>
+                        <input type="datetime-local" id="event-end">
+                    </div>
+                    <div class="form-group">
+                        <label for="event-color">Event Color</label>
+                        <input type="color" id="event-color" value="#0A84FF">
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="app.closeModal()">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
